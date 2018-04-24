@@ -1,7 +1,6 @@
 using CustomerAdmin.Data.Csv;
 using CustomerAdmin.Data.Csv.Interfaces;
 using Microsoft.Extensions.Configuration;
-using System;
 using Xunit;
 
 namespace CustomerAdmin.UnitTests
