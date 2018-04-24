@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CustomerAdmin.Data.Database;
+using CustomerAdmin.Data.Models.DbContexts;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace CustomerAdmin
 {
@@ -14,7 +11,23 @@ namespace CustomerAdmin
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            var host = BuildWebHost(args);
+
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    var context = services.GetRequiredService<CustomerContext>();
+                    CustomerAdminDbInitializer.Seed(context);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"An error occurred while seeding the db: {e.Message}");
+                }
+            }
+
+            host.Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
