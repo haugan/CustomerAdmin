@@ -21,7 +21,7 @@ namespace CustomerAdmin.UnitTests
             config = new ConfigurationBuilder()
                 .AddJsonFile("C:\\Dev\\DotNET\\CustomerAdmin\\CustomerAdmin.UnitTests\\appsettings.json")
                 .Build();
-            path = config.GetSection("FilePaths")[$"Csv:Test"];
+            path = config.GetSection("FilePaths")["Csv:Test"];
 
             csvReader = new CsvReader(config);
             csvParser = new CsvParser();
