@@ -1,7 +1,6 @@
 ﻿using CustomerAdmin.Data.Models.DbContexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +23,7 @@ namespace CustomerAdmin
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<CustomerContext>(options => options.UseSqlServer(config.GetSection("ConnectionStrings")["CustomerAdminLocal"]));
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,9 +34,11 @@ namespace CustomerAdmin
                 app.UseDeveloperExceptionPage();
             }
 
-            app.Run(async (context) =>
+            app.UseMvc(routes =>
             {
-                await context.Response.WriteAsync("Hello World!");
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
